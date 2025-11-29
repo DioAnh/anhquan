@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hackathon Cursor HCMC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;800&family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: transparent;
+        margin: 0;
+        overflow-x: hidden;
+        color: #4b5563;
+      }
+
+      .animated-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -2; 
+        overflow: hidden;
+        background-color: #fff0f5; 
+      }
+
+      .spotlight-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        background: radial-gradient(
+          circle 600px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+          rgba(255, 255, 255, 0) 0%, 
+          rgba(255, 240, 245, 0.5) 50%,
+          rgba(255, 240, 245, 0.8) 100%
+        );
+        mix-blend-mode: overlay;
+      }
+
+      .pattern-overlay {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(#f9a8d4 2px, transparent 2px);
+        background-size: 40px 40px;
+        opacity: 0.3; 
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.8;
+        animation-name: float;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+        animation-direction: alternate;
+        animation-duration: 20s; 
+      }
+
+      .blob-1 {
+        top: -10%;
+        left: -10%;
+        width: 60vw;
+        height: 60vw;
+        background: #f9a8d4;
+        animation-duration: 25s;
+        transform-origin: top left;
+      }
+
+      .blob-2 {
+        bottom: -20%;
+        right: -10%;
+        width: 60vw;
+        height: 60vw;
+        background: #7dd3fc;
+        animation-duration: 30s;
+        animation-delay: -5s;
+        transform-origin: bottom right;
+      }
+
+      .blob-3 {
+        top: 30%;
+        left: 40%;
+        width: 40vw;
+        height: 40vw;
+        background: #fcd34d;
+        animation-duration: 22s;
+        animation-delay: -10s;
+      }
+
+      .blob-4 {
+        bottom: 10%;
+        left: 5%;
+        width: 45vw;
+        height: 45vw;
+        background: #c4b5fd;
+        animation-duration: 28s;
+        animation-delay: -8s;
+      }
+      
+      .blob-5 {
+         top: 5%;
+         right: 10%;
+         width: 30vw;
+         height: 30vw;
+         background: #86efac;
+         animation-duration: 24s;
+         animation-delay: -15s;
+      }
+
+      @keyframes float {
+        0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+        33% { transform: translate(50px, -50px) scale(1.1) rotate(10deg); }
+        66% { transform: translate(-30px, 40px) scale(0.9) rotate(-5deg); }
+        100% { transform: translate(20px, -20px) scale(1.05) rotate(5deg); }
+      }
+
+      #magic-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      ::-webkit-scrollbar { width: 14px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #f472b6; border-radius: 20px; border: 4px solid #fff0f5; }
+      ::-webkit-scrollbar-thumb:hover { background: #ec4899; }
+    </style>
+  </head>
+  <body>
+    <div class="animated-background">
+        <div class="spotlight-overlay"></div>
+        <div class="pattern-overlay"></div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="blob blob-5"></div>
+    </div>
+    
+    <canvas id="magic-cursor"></canvas>
+
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const bg = document.querySelector('.animated-background');
+            if (bg) {
+                bg.style.setProperty('--mouse-x', `${e.clientX}px`);
+                bg.style.setProperty('--mouse-y', `${e.clientY}px`);
+            }
+        });
+
+        const canvas = document.getElementById('magic-cursor');
+        const ctx = canvas.getContext('2d');
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let particles = [];
+
+        const colors = ['#f9a8d4', '#7dd3fc', '#fcd34d', '#86efac', '#c4b5fd', '#FDA4AF'];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 15 + 5; 
+                this.speedX = Math.random() * 4 - 2;
+                this.speedY = Math.random() * 4 - 2;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.life = 1.0; 
+                this.decay = Math.random() * 0.03 + 0.01;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size *= 0.95;
+                this.life -= this.decay;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(this.x - this.size * 0.3, this.y - this.size * 0.3, this.size * 0.2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function handleParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0 || particles[i].size <= 0.5) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            handleParticles();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let isMoving = false;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.x;
+            mouseY = e.y;
+            isMoving = true;
+            particles.push(new Particle(mouseX, mouseY));
+            particles.push(new Particle(mouseX, mouseY));
+        });
+
+        setInterval(() => {
+            if (!isMoving && particles.length < 20) {
+                 particles.push(new Particle(
+                    Math.random() * width, 
+                    Math.random() * height
+                ));
+            }
+            isMoving = false;
+        }, 500);
+
+    </script>
+  </body>
+</html>
+
