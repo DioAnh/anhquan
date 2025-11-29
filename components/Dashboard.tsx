@@ -163,7 +163,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userName, onLogout }) => {
                                 <span className="text-xl">✨</span>
                                 <div>
                                     <p>Tạo Avatar mới</p>
-                                    <p className="text-xs font-normal text-purple-400">Phép thuật biến hình</p>
                                 </div>
                              </button>
 
@@ -186,7 +185,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userName, onLogout }) => {
                                 <span className="text-xl">🚪</span>
                                 <div>
                                     <p>Đăng xuất</p>
-                                    <p className="text-xs font-normal text-gray-400">Giữ lại dữ liệu học tập</p>
                                 </div>
                              </button>
                         </div>
