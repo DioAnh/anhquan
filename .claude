@@ -1,0 +1,231 @@
+# Project Context: Hackathon Cursor HCMC
+
+## 📋 Tổng quan Project
+
+**Tên Project**: Hackathon Cursor HCMC  
+**Mục đích**: Ứng dụng web với luồng khởi động đầy đủ (Splash → Login → Dashboard)  
+**Nguồn gốc**: Copy từ project `D:\enduca` (ứng dụng giáo dục kỹ năng sống cho trẻ em)  
+**Trạng thái**: Đã copy luồng khởi động cơ bản, sẵn sàng phát triển tiếp
+
+---
+
+## 🏗️ Kiến trúc & Công nghệ
+
+### Tech Stack
+- **Frontend Framework**: React 19.2.0
+- **Language**: TypeScript 5.8.2
+- **Build Tool**: Vite 6.2.0
+- **Styling**: Tailwind CSS (via CDN)
+- **Fonts**: Google Fonts (Fredoka, Quicksand)
+
+### Cấu trúc Thư mục
+```
+hackathoncursorHCMC/
+├── components/
+│   ├── SplashScreen.tsx    # Màn hình splash với animation (5 giây)
+│   ├── Login.tsx           # Màn hình đăng nhập với input tên
+│   └── Dashboard.tsx       # Dashboard chính (phiên bản đơn giản)
+├── App.tsx                 # Component chính, quản lý routing logic
+├── index.tsx               # Entry point React
+├── index.html              # HTML template với animated background
+├── package.json            # Dependencies và scripts
+├── vite.config.ts          # Cấu hình Vite (port 3000)
+├── tsconfig.json           # Cấu hình TypeScript
+└── README.md               # Tài liệu hướng dẫn
+```
+
+---
+
+## 🔄 Luồng Hoạt Động (Flow)
+
+### 1. Splash Screen (5 giây)
+- **Component**: `components/SplashScreen.tsx`
+- **Hiệu ứng**: 
+  - Text animation với gradient flow
+  - Floating objects (emoji) bay lượn
+  - Blob background animations
+  - Mist fade effect khi kết thúc
+- **Tự động chuyển** sau 5 giây
+
+### 2. Login Screen
+- **Component**: `components/Login.tsx`
+- **Chức năng**:
+  - Input tên người dùng
+  - Lưu vào `localStorage.setItem('userName', name)`
+  - Lưu trạng thái đăng nhập: `localStorage.setItem('isLoggedIn', 'true')`
+  - Animation mist exit khi chuyển màn hình
+- **Validation**: Phải nhập tên mới được tiếp tục
+
+### 3. Dashboard
+- **Component**: `components/Dashboard.tsx`
+- **Hiện tại**: Phiên bản đơn giản với:
+  - Welcome message với tên người dùng
+  - 3 cards placeholder (Thống kê, Mục tiêu, Thành tích)
+- **Cần phát triển**: Thêm tính năng thực tế
+
+---
+
+## 💾 State Management
+
+### LocalStorage Keys
+- `userName`: Tên người dùng
+- `isLoggedIn`: Trạng thái đăng nhập ('true' hoặc null)
+
+### React State (App.tsx)
+- `showSplash`: boolean - Hiển thị splash screen
+- `isLoggedIn`: boolean - Trạng thái đăng nhập
+
+---
+
+## 🎨 Design System
+
+### Màu sắc chủ đạo
+- **Pink**: `#f9a8d4`, `#fecfef`, `#ff9a9e`
+- **Blue**: `#7dd3fc`, `#8fd3f4`
+- **Yellow**: `#fcd34d`, `#f6d365`
+- **Purple**: `#a18cd1`, `#c4b5fd`
+- **Green**: `#86efac`, `#84fab0`
+
+### Typography
+- **Heading**: Fredoka (900 weight)
+- **Body**: Quicksand (400, 600, 700, 800)
+
+### Animation Style
+- Smooth transitions
+- Bounce effects
+- Gradient flows
+- Floating particles
+- Blob backgrounds
+
+---
+
+## 📦 Dependencies
+
+### Production
+```json
+{
+  "react": "^19.2.0",
+  "react-dom": "^19.2.0"
+}
+```
+
+### Development
+```json
+{
+  "@types/node": "^22.14.0",
+  "@types/react": "^18.3.12",
+  "@types/react-dom": "^18.3.1",
+  "@vitejs/plugin-react": "^5.0.0",
+  "typescript": "~5.8.2",
+  "vite": "^6.2.0"
+}
+```
+
+---
+
+## 🚀 Scripts
+
+```bash
+npm install      # Cài đặt dependencies
+npm run dev      # Chạy development server (localhost:3000)
+npm run build    # Build production
+npm run preview  # Preview production build
+```
+
+---
+
+## ✅ Đã Hoàn Thành
+
+- [x] Setup project với Vite + React + TypeScript
+- [x] Copy SplashScreen component với animations
+- [x] Copy Login component với validation
+- [x] Tạo Dashboard component cơ bản
+- [x] Implement routing logic trong App.tsx
+- [x] Setup animated background trong index.html
+- [x] Cấu hình Tailwind CSS
+- [x] Tạo README với hướng dẫn
+
+---
+
+## 🔮 Hướng Phát Triển Tiếp Theo
+
+### Gợi ý tính năng có thể thêm:
+
+1. **Dashboard Features**
+   - Thống kê thực tế (số bài học, điểm số, streak)
+   - Hệ thống cấp độ (levels)
+   - Achievement badges
+   - Progress tracking
+
+2. **User Features**
+   - Avatar customization
+   - Profile settings
+   - Logout functionality
+
+3. **Content Features**
+   - Bài học/Modules
+   - Quiz system
+   - Games/Challenges
+   - Video player integration
+
+4. **Backend Integration** (nếu cần)
+   - API integration
+   - User authentication
+   - Data persistence
+
+5. **UI/UX Enhancements**
+   - Responsive design improvements
+   - Dark mode
+   - Accessibility features
+   - Loading states
+   - Error handling
+
+---
+
+## 📝 Notes & Best Practices
+
+### Code Style
+- Sử dụng TypeScript strict mode
+- Functional components với hooks
+- Props interface được định nghĩa rõ ràng
+- Inline styles cho animations phức tạp
+
+### Performance
+- Lazy loading components (có thể thêm sau)
+- Memoization nếu cần
+- Optimize images/assets
+
+### Security
+- Validate user input
+- Sanitize localStorage data
+- XSS prevention
+
+---
+
+## 🔗 Tham khảo từ Project Gốc
+
+**Source**: `D:\enduca`
+- Project gốc là ứng dụng giáo dục kỹ năng sống cho trẻ em
+- Có tích hợp Google Gemini AI
+- Có hệ thống bài học, quiz, games phức tạp
+- **Chỉ copy luồng khởi động** (Splash → Login → Dashboard) cho project này
+
+---
+
+## 🐛 Known Issues
+
+- Chưa có error handling
+- Chưa có loading states
+- Dashboard còn đơn giản, cần phát triển thêm
+
+---
+
+## 📞 Contact & Support
+
+Project được tạo cho Hackathon Cursor HCMC.  
+Có thể mở rộng theo nhu cầu của hackathon.
+
+---
+
+*File này được tạo để lưu context project, giúp dễ dàng tiếp tục phát triển sau này.*
+

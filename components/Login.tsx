@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 interface LoginProps {
@@ -10,16 +11,21 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   const handleStart = () => {
     if (name.trim()) {
+      // Trigger the mist dissolve animation
       setIsExiting(true);
+      
       localStorage.setItem('userName', name.trim());
+      
+      // Wait for animation to finish before switching view
       setTimeout(() => {
           onLogin();
-      }, 1500);
+      }, 1500); // Matches CSS animation duration
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 overflow-hidden relative">
+      {/* Decorative Blobs */}
       <div className="absolute top-10 left-10 w-40 h-40 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-bounce delay-1000"></div>
       <div className="absolute top-20 right-20 w-40 h-40 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
       <div className="absolute -bottom-8 left-1/2 w-64 h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 transform -translate-x-1/2"></div>
@@ -37,10 +43,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             className="text-6xl md:text-7xl mb-4 tracking-wide text-gradient-flow"
             style={{ fontFamily: "'Fredoka', sans-serif", fontWeight: 900 }}
         >
-          Hackathon
+          enduca
         </h1>
         <p className="text-gray-600 text-xl font-bold mb-10 leading-relaxed font-quicksand">
-          Chào mừng bạn đến với<br/>ứng dụng của chúng tôi! 🌈
+          Chào mừng bé đến với<br/>thế giới kỹ năng diệu kỳ! 🌈
         </p>
         
         <div className="mb-8 relative group">
@@ -49,11 +55,12 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleStart()}
-            placeholder="Tên của bạn là gì?"
+            placeholder="Tên của bé là gì nhỉ?"
             className="w-full px-8 py-6 text-2xl font-bold text-gray-700 bg-pink-50 border-[4px] border-pink-200 rounded-full focus:outline-none focus:border-pink-400 focus:bg-white placeholder-pink-300 transition-all duration-300 shadow-inner text-center font-quicksand"
             autoFocus
             disabled={isExiting}
           />
+          <div className="absolute right-6 top-1/2 transform -translate-y-1/2 text-2xl opacity-50 group-focus-within:opacity-100 transition-opacity"></div>
         </div>
         
         <button
@@ -66,6 +73,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       </div>
 
       <style>{`
+        /* Fluid Gradient Flow (Matches Splash Screen) */
         .text-gradient-flow {
             background-image: linear-gradient(
                 -45deg, 
@@ -84,6 +92,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             100% { background-position: 0% 50%; }
         }
 
+        /* Mist Dissolve Exit Animation */
         @keyframes mistExit {
             0% { 
                 opacity: 1; 
@@ -109,4 +118,3 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 };
 
 export default Login;
-

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hackathon Cursor HCMC</title>
+    <title>enduca - Bé Học Kỹ Năng Sống</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,12 +12,15 @@
     <style>
       body {
         font-family: 'Quicksand', sans-serif;
+        /* Đặt nền trong suốt để thấy lớp animated-background bên dưới */
         background-color: transparent;
         margin: 0;
         overflow-x: hidden;
         color: #4b5563;
+        cursor: default; /* Sẽ được thay thế bằng logic JS nếu cần custom cursor */
       }
 
+      /* Container cho nền động, z-index thấp nhất */
       .animated-background {
         position: fixed;
         top: 0;
@@ -29,10 +32,11 @@
         background-color: #fff0f5; 
       }
 
+      /* Lớp phủ Spotlight đi theo chuột */
       .spotlight-overlay {
         position: absolute;
         inset: 0;
-        z-index: 2;
+        z-index: 2; /* Nằm trên blobs nhưng dưới content app */
         pointer-events: none;
         background: radial-gradient(
           circle 600px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
@@ -43,6 +47,7 @@
         mix-blend-mode: overlay;
       }
 
+      /* Họa tiết chấm bi phủ lên trên các khối màu */
       .pattern-overlay {
         position: absolute;
         inset: 0;
@@ -53,6 +58,7 @@
         pointer-events: none;
       }
 
+      /* Định nghĩa chung cho các khối màu (blobs) */
       .blob {
         position: absolute;
         border-radius: 50%;
@@ -70,7 +76,7 @@
         left: -10%;
         width: 60vw;
         height: 60vw;
-        background: #f9a8d4;
+        background: #f9a8d4; /* Pink 300 */
         animation-duration: 25s;
         transform-origin: top left;
       }
@@ -80,7 +86,7 @@
         right: -10%;
         width: 60vw;
         height: 60vw;
-        background: #7dd3fc;
+        background: #7dd3fc; /* Sky 300 */
         animation-duration: 30s;
         animation-delay: -5s;
         transform-origin: bottom right;
@@ -91,7 +97,7 @@
         left: 40%;
         width: 40vw;
         height: 40vw;
-        background: #fcd34d;
+        background: #fcd34d; /* Amber 300 */
         animation-duration: 22s;
         animation-delay: -10s;
       }
@@ -101,7 +107,7 @@
         left: 5%;
         width: 45vw;
         height: 45vw;
-        background: #c4b5fd;
+        background: #c4b5fd; /* Violet 300 */
         animation-duration: 28s;
         animation-delay: -8s;
       }
@@ -111,7 +117,7 @@
          right: 10%;
          width: 30vw;
          height: 30vw;
-         background: #86efac;
+         background: #86efac; /* Green 300 */
          animation-duration: 24s;
          animation-delay: -15s;
       }
@@ -123,14 +129,15 @@
         100% { transform: translate(20px, -20px) scale(1.05) rotate(5deg); }
       }
 
+      /* Canvas cho hiệu ứng chuột (Magic Dust) */
       #magic-cursor {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        pointer-events: none;
-        z-index: -1;
+        pointer-events: none; /* Để không chặn click vào App */
+        z-index: -1; /* Nằm ngay dưới App nhưng trên background */
       }
 
       ::-webkit-scrollbar { width: 14px; }
@@ -138,9 +145,22 @@
       ::-webkit-scrollbar-thumb { background: #f472b6; border-radius: 20px; border: 4px solid #fff0f5; }
       ::-webkit-scrollbar-thumb:hover { background: #ec4899; }
     </style>
-  </head>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.28.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
   <body>
+    <!-- Phần nền động -->
     <div class="animated-background">
+        <!-- Spotlight effect overlay -->
         <div class="spotlight-overlay"></div>
         <div class="pattern-overlay"></div>
         <div class="blob blob-1"></div>
@@ -150,12 +170,15 @@
         <div class="blob blob-5"></div>
     </div>
     
+    <!-- Canvas cho hiệu ứng hạt bụi tiên -->
     <canvas id="magic-cursor"></canvas>
 
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 
+    <!-- Script xử lý hiệu ứng chuột -->
     <script>
+        // 1. Xử lý Spotlight (CSS Variable)
         document.addEventListener('mousemove', (e) => {
             const bg = document.querySelector('.animated-background');
             if (bg) {
@@ -164,12 +187,14 @@
             }
         });
 
+        // 2. Xử lý Magic Dust (Canvas)
         const canvas = document.getElementById('magic-cursor');
         const ctx = canvas.getContext('2d');
         let width = window.innerWidth;
         let height = window.innerHeight;
         let particles = [];
 
+        // Màu sắc pastel vui nhộn
         const colors = ['#f9a8d4', '#7dd3fc', '#fcd34d', '#86efac', '#c4b5fd', '#FDA4AF'];
 
         function resize() {
@@ -183,19 +208,23 @@
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
+                // Kích thước ngẫu nhiên
                 this.size = Math.random() * 15 + 5; 
+                // Tốc độ di chuyển ngẫu nhiên
                 this.speedX = Math.random() * 4 - 2;
                 this.speedY = Math.random() * 4 - 2;
+                // Màu ngẫu nhiên
                 this.color = colors[Math.floor(Math.random() * colors.length)];
+                // Độ trong suốt
                 this.life = 1.0; 
-                this.decay = Math.random() * 0.03 + 0.01;
+                this.decay = Math.random() * 0.03 + 0.01; // Tốc độ tan biến
             }
 
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                this.size *= 0.95;
-                this.life -= this.decay;
+                this.size *= 0.95; // Thu nhỏ dần
+                this.life -= this.decay; // Mờ dần
             }
 
             draw() {
@@ -205,6 +234,7 @@
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
                 
+                // Thêm hiệu ứng lấp lánh (chấm trắng nhỏ)
                 ctx.fillStyle = 'white';
                 ctx.beginPath();
                 ctx.arc(this.x - this.size * 0.3, this.y - this.size * 0.3, this.size * 0.2, 0, Math.PI * 2);
@@ -230,6 +260,7 @@
         }
         animate();
 
+        // Thêm hạt khi di chuột
         let mouseX = 0;
         let mouseY = 0;
         let isMoving = false;
@@ -238,10 +269,12 @@
             mouseX = e.x;
             mouseY = e.y;
             isMoving = true;
+            // Tạo hạt mỗi khi di chuyển (tạo 2 hạt để dày hơn)
             particles.push(new Particle(mouseX, mouseY));
             particles.push(new Particle(mouseX, mouseY));
         });
 
+        // Tự động tạo hạt ngẫu nhiên nếu không di chuột (để màn hình luôn sinh động)
         setInterval(() => {
             if (!isMoving && particles.length < 20) {
                  particles.push(new Particle(
@@ -255,4 +288,3 @@
     </script>
   </body>
 </html>
-

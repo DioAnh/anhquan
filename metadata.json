@@ -1,0 +1,5 @@
+{
+  "name": "enduca - Kỹ Năng Sống Cho Trẻ Em",
+  "description": "Một ứng dụng web tương tác được thiết kế để dạy các kỹ năng sống cần thiết cho trẻ em Việt Nam từ 5-12 tuổi thông qua các video bài học, tóm tắt và câu đố vui. Ứng dụng sử dụng AI để tạo nội dung học tập hấp dẫn.",
+  "requestFramePermissions": []
+}

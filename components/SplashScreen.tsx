@@ -1,6 +1,8 @@
+
 import React from 'react';
 
 const SplashScreen: React.FC = () => {
+  // Danh sách các vật thể dễ thương bay lượn
   const floatingObjects = [
     { icon: '🌟', top: '15%', left: '10%', delay: '0s', duration: '3s' },
     { icon: '🚀', top: '20%', right: '15%', delay: '0.5s', duration: '4s' },
@@ -21,18 +23,24 @@ const SplashScreen: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-white/95 backdrop-blur-3xl">
+      {/* Background Explosions - Soft pastel blobs */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-yellow-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob"></div>
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-purple-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
       <div className="absolute -bottom-32 left-1/3 w-[600px] h-[600px] bg-pink-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-4000"></div>
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-radial from-white/0 to-white/90 z-10"></div>
 
+      {/* Main Content Container */}
       <div className="relative w-full h-full flex items-center justify-center z-20">
+        
+        {/* Animated Text Container with Mist Dissolve Effect */}
         <div className="w-full flex flex-col items-center justify-center relative animate-mist-fade">
+             
+             {/* Text Shadow/Glow Effect Layer */}
              <h1 
                 className="absolute blur-xl tracking-wide flex gap-2 opacity-40 pointer-events-none select-none"
                 style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 'clamp(5rem, 15vw, 10rem)', fontWeight: 900 }}
             >
-                {['H', 'A', 'C', 'K', 'A', 'T', 'H', 'O', 'N'].map((char, index) => (
+                {['E', 'N', 'D', 'U', 'C', 'A'].map((char, index) => (
                     <span 
                         key={index}
                         className="animate-jelly-wave text-pink-300"
@@ -43,11 +51,12 @@ const SplashScreen: React.FC = () => {
                 ))}
              </h1>
 
+             {/* Main Text - Applied Fredoka font with Fluid Gradient */}
             <h1 
                 className="tracking-wide flex gap-1 sm:gap-2 drop-shadow-lg relative z-10"
                 style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 'clamp(5rem, 15vw, 10rem)', fontWeight: 900 }}
             >
-                {['h', 'a', 'c', 'k', 'a', 't', 'h', 'o', 'n'].map((char, index) => (
+                {['e', 'n', 'd', 'u', 'c', 'a'].map((char, index) => (
                     <span 
                         key={index}
                         className="animate-jelly-wave text-gradient-flow inline-block"
@@ -61,6 +70,7 @@ const SplashScreen: React.FC = () => {
             </h1>
         </div>
 
+        {/* Decorative Floating Particles */}
         <div className="absolute inset-0 pointer-events-none animate-fade-out-particles">
              {floatingObjects.map((obj, idx) => (
                  <div 
@@ -94,6 +104,7 @@ const SplashScreen: React.FC = () => {
         .animation-delay-2000 { animation-delay: 2s; }
         .animation-delay-4000 { animation-delay: 4s; }
 
+        /* MIST FADE ANIMATION */
         @keyframes mistFade {
             0% { 
                 opacity: 0; 
@@ -130,6 +141,7 @@ const SplashScreen: React.FC = () => {
             animation: fadeOutParticles 5s ease-out forwards;
         }
 
+        /* Jelly Wave */
         @keyframes jellyWave {
             0%, 100% { 
                 transform: translateY(0) scale(1, 1) rotate(0deg); 
@@ -150,15 +162,19 @@ const SplashScreen: React.FC = () => {
             transform-origin: bottom center;
         }
 
+        /* 
+           FLUID GRADIENT FLOW 
+           Using a large background size and diagonal/circular movement to simulate liquid/clouds 
+        */
         .text-gradient-flow {
             background-image: linear-gradient(
                 -45deg, 
-                #ff9a9e,
-                #fecfef,
-                #a18cd1,
-                #8fd3f4,
-                #84fab0,
-                #f6d365
+                #ff9a9e, /* Soft Pink */
+                #fecfef, /* Light Pink */
+                #a18cd1, /* Lavender */
+                #8fd3f4, /* Sky Blue */
+                #84fab0, /* Mint Green */
+                #f6d365  /* Warm Yellow */
             );
             background-size: 400% 400%;
             -webkit-background-clip: text;
@@ -190,4 +206,3 @@ const SplashScreen: React.FC = () => {
 };
 
 export default SplashScreen;
-

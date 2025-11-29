@@ -7,9 +7,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+.pnp
+.pnp.js
+
+# Build Output
 dist
 dist-ssr
+coverage
+
+# Environment Variables (QUAN TRỌNG: Chặn tất cả file chứa Key)
+.env
+.env.local
+.env.*.local
 *.local
 
 # Editor directories and files
@@ -23,8 +34,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment variables
-.env
-.env.local
-.env.production
+# Windows System Files (Vì bạn dùng Windows)
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
+# Netlify (Vì bạn deploy lên Netlify)
+.netlify
