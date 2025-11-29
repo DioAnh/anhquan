@@ -9,9 +9,10 @@ import ChallengeGame from './ChallengeGame';
 
 interface DashboardProps {
     userName: string;
+    onLogout: () => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ userName }) => {
+const Dashboard: React.FC<DashboardProps> = ({ userName, onLogout }) => {
     const { stats, progress, avatarUrl, updateAvatar, dailyQuizCompletedDate, completeDailyQuiz } = useUserProgress();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -173,6 +174,19 @@ const Dashboard: React.FC<DashboardProps> = ({ userName }) => {
                                 <span className="text-xl">↩️</span>
                                 <div>
                                     <p>Về mặc định</p>
+                                </div>
+                             </button>
+
+                             <div className="border-t border-gray-200 my-1"></div>
+
+                             <button 
+                                onClick={onLogout}
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 text-gray-600 font-bold transition-colors text-left"
+                            >
+                                <span className="text-xl">🚪</span>
+                                <div>
+                                    <p>Đăng xuất</p>
+                                    <p className="text-xs font-normal text-gray-400">Giữ lại dữ liệu học tập</p>
                                 </div>
                              </button>
                         </div>

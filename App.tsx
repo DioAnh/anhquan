@@ -99,7 +99,7 @@ const COMING_SOON_THEMES = [
 ];
 
 
-function AppContent() {
+function AppContent({ onLogout }: { onLogout: () => void }) {
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
@@ -204,7 +204,7 @@ function AppContent() {
     return (
         <>
             <Header title={`Chào mừng bé trở lại!`} />
-            <Dashboard userName={userName} />
+            <Dashboard userName={userName} onLogout={onLogout} />
             <div className="p-4 max-w-6xl mx-auto pb-24">
                 <div className="flex items-center justify-between mb-8 px-4">
                      <h2 className="text-2xl font-black text-gray-600">Khám phá thế giới</h2>
@@ -364,6 +364,12 @@ export default function App() {
         setIsLoggedIn(true);
     };
 
+    const handleLogout = () => {
+        // Chỉ xóa trạng thái đăng nhập, giữ lại tất cả dữ liệu người dùng
+        localStorage.removeItem('isLoggedIn');
+        setIsLoggedIn(false);
+    };
+
     // Show Splash Screen first
     if (showSplash) {
         return <SplashScreen />;
@@ -377,7 +383,7 @@ export default function App() {
     // Finally Main App
     return (
         <UserProgressProvider>
-            <AppContent />
+            <AppContent onLogout={handleLogout} />
         </UserProgressProvider>
     );
 }
